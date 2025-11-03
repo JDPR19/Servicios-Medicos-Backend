@@ -2,6 +2,7 @@ const { Router } = require('express');
 const verificarToken = require('../helpers/verificarToken');
 const checkPermisos = require('../helpers/checkPermisos');
 const { deleteDoctor, updateDoctor, getDoctor, getCargos, getProfesion, createDoctor, getAllDoctores } = require('../controllers/doctor.controller');
+const { route } = require('./auth.routes');
 
 const router = Router();
 
@@ -11,11 +12,16 @@ router
 
 router
     .route('/registrar')
-    .get(verificarToken, checkPermisos('doctores', 'ver'), getCargos)
-    .get(verificarToken, checkPermisos('doctores', 'ver'), getProfesion)
     .post(verificarToken, checkPermisos('doctores', 'crear'), createDoctor);
 
 
+router
+    .route('/cargos')
+    .get(verificarToken, checkPermisos('doctores', 'ver'), getCargos);
+    
+router
+    .route('/profesiones')
+    .get(verificarToken, checkPermisos('doctores', 'ver'), getProfesion);
 router
     .route('/ver/:id')
     .get(verificarToken, checkPermisos('doctores', 'ver'), getDoctor);

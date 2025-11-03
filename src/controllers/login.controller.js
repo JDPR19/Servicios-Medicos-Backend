@@ -6,7 +6,7 @@ const {crearSesion, cerrarSesion, tienesSesionActivo} = require('./sesion.contro
 const loginUsuario = async (req, res, next) => {
     const {username, password} = req.body;
     const ip = req.ip;
-    const user_agent = req.headers['user_agent'];
+    const user_agent = req.headers['user-agent'];
 
     try {
         const result = await pool.query(`
@@ -81,7 +81,7 @@ const logoutUsuario = async (req, res, next) => {
             await cerrarSesion(token);
         }
 
-        return res.status().json({message: ' Sesión cerrada exitosamente'})
+        return res.status(200).json({message: ' Sesión cerrada exitosamente'})
     } catch (error) {
         res.status(500).json({message: 'error cerrando sesión', error: error.message});
     }
@@ -99,6 +99,7 @@ async function getNotificacionesPendientes(req, res, next) {
         res.json(result.rows);
         
     }catch(error){
+        console.error(error);
         next(error);
     }
 };

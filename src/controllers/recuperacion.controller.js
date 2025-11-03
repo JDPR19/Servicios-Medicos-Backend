@@ -1,4 +1,4 @@
-const pool = require('../db');
+const pool = require('../config/db');
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
 

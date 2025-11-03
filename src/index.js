@@ -1,9 +1,10 @@
 const express = require('express');
 const morgan = require('morgan');
+// const path = require('path');
 const cors = require('cors');
 const http = require('http');
 const { Server } = require('socket.io');
-require('/cleanSesion');
+require('./cleanSesion');
 
 /////// INICIO RUTASS///////
 const cargos = require('./routes/cargo.routes');
@@ -32,15 +33,64 @@ const login = require('./routes/auth.routes');
 const recuperacion = require('./routes/recuperacion.routes');
 // ///////// FIN RUTAS ///////
 
+
+// --- Configuración de CORS ---
+const allowed = [
+    'http://localhost:5173',
+];
+const corsOptions = {
+    origin: allowed,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH']
+};
 // INICIANDO EXPRESS////
 
 const app = express();
 app.use(express.json());
 
-///// MIDDLEWARES////
+///// MIDDLEWARES////////
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(morgan('dev'));
+
+////////////////////////// 
+
+// -----Socket.io ------
+const server = http.createServer(app);
+    const io = new Server(server, {
+    cors: {
+        origin: (origin, cb) => {
+        if (!origin) return cb(null, true);
+        if (allowed.includes(origin)) return cb(null, true);
+        return cb(new Error(`CORS WS no permitido: ${origin}`));
+        },
+        credentials: true,
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH']
+    },
+    transports: ['websocket', 'polling'],
+    path: '/socket.io'
+});
+
+// ---Guardar el objeto io para usarlo en los controladores-----
+global.io = io;
+app.set('io', io);
+
+io.on('connection', (socket) => {
+    console.log('socket conectado:', socket.id);
+
+    socket.on('join', (usuarioId) => {
+        socket.join(`user:${usuarioId}`);
+    });
+
+    socket.on('disconnect', (reason) => {
+        console.warn('socket desconectado:', reason);
+    });
+
+    socket.on('error', (err) => {
+        console.error('socket error:', err?.message || err);
+    });
+});
+// -------------------////////////////////
 
 ///////////// USO DE RUTAS ////////////////
 app.use('/recuperacion', recuperacion);
@@ -69,6 +119,7 @@ app.use('/cargos', cargos);
 app.use('/profesion', profesion);
 // FIN DEL USO DE RUTAS ///////////////////
 
+// ----Manejador de Errores Globales/////////
 app.use((req, res, next) => {
     res.status(404).json({
         message: 'ruta no encontrada',
@@ -82,21 +133,8 @@ app.use((err, req, res, next) => {
         error: process.env.NODE_ENV === 'development' ? err.message : 'Error interno',
     });
 });
+/////////////////////////--------------------------//////////////////////////
 
-// /////////// SOCKET.IO INICIALIZACION ///////////////
-
-const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: '*'} });
-
-/////// GUARDO OBJETO IO PARA SU USO EN CONTROLADORES////////
-
-app.set('io', io);
-
-io.on('connection', (socket) => {
-    socket.on('join', (usuarioId) => {
-        socket.join(`usuario_${usuarioId}`);
-    });
-});
 /////////// LISTAR EN PUERTO DEL SERVIDOR PARA SU INICIO ////////////////
 
 const PORT = process.env.PORT || 4000;

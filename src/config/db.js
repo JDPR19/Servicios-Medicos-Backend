@@ -17,8 +17,10 @@ pool.query('SELECT NOW()', (err, res) => {
     if (err) {
         console.error('Error al Conectar a la Base de Datos:', err);
     } else {
-        console.error('Conexción exitosa a PostgreSQL:', res.rows[0].now);
+        console.error('Conexión exitosa a PostgreSQL:', res.rows[0].now);
     }
 });
+
+module.exports = pool;
 
 //////////////////////// FIN DE LA PRUEBA ///////////////////////////////////////

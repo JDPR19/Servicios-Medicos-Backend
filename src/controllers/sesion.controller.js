@@ -1,9 +1,9 @@
 const pool = require('../config/db');
 
-const crearSesion = async (usuario_id, Token, ip, user_agent ) => {
+const crearSesion = async (usuario_id, Token, ip = null, user_agent = null ) => {
     await pool.query(`UPDATE sesiones SET activo = false, fecha_fin = NOW() WHERE usuario_id = $1 AND activo = TRUE `, [usuario_id]);
 
-    await pool.QUERY(`INSERT INTO sesiones (usuario_id, token, ip, user_agent) VALUES ($1,$2, $3, $4)`, [usuario_id, Token, ip, user_agent]);
+    await pool.query(`INSERT INTO sesiones (usuario_id, token, ip, user_agent) VALUES ($1,$2, $3, $4)`, [usuario_id, Token, ip, user_agent]);
 
 };
 
