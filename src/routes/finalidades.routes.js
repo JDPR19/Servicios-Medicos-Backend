@@ -10,11 +10,11 @@ router
     .get(verificarToken, checkPermisos('finalidades', 'ver'), getAllFinalidades);
 
 router
-    .route('/Registrar')
+    .route('/registrar')
     .post(verificarToken, checkPermisos('finalidades', 'crear'), createFinalidades);
 
 router
-    .route('ver/:id')
+    .route('/ver/:id')
     .get(verificarToken, checkPermisos('finalidades', 'ver'), getFinalidades);
 
 router

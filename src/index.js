@@ -111,7 +111,7 @@ app.use('/parroquias', parroquias);
 app.use('/municipios', municipios);
 app.use('/departamentos', departamentos);
 app.use('/roles', roles);
-app.use('/finalidades', finalidades);
+app.use('/finalidad', finalidades);
 app.use('/categoria_e', categoria_e);
 app.use('/categoria_m', categoria_m);
 app.use('/estado', estado);
