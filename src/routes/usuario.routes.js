@@ -7,26 +7,39 @@ const router = Router();
 
 router
     .route('/')
-    .get(verificarToken, checkPermisos('usuario', 'ver'), getAllUsuarios);
+    .get(verificarToken, checkPermisos('usuarios', 'ver'), getAllUsuarios);
 
 router
     .route('/registrar')
-    .post(verificarToken, checkPermisos('usuario', 'crear'), createUsuario)
-    .get(verificarToken, checkPermisos('usuario', 'ver'), getProfesiones)
-    .get(verificarToken, checkPermisos('usuario', 'ver'), getRoles)
-    .get(verificarToken, checkPermisos('usuario', 'ver'), getDoctores)
-    .get(verificarToken, checkPermisos('usuario', 'ver'), getCargos);
+    .post(verificarToken, checkPermisos('usuarios', 'crear'), createUsuario);
+
+router
+    .route('/catalogos/profesionales')
+    .get(verificarToken, checkPermisos('usuarios', 'ver'), getProfesiones);
+
+router
+    .route('/catalogos/roles')
+    .get(verificarToken, checkPermisos('usuarios', 'ver'), getRoles);
+
+
+router
+    .route('/catalogos/doctores')
+    .get(verificarToken, checkPermisos('usuarios', 'ver'), getDoctores);
+
+router
+    .route('/catalogos/cargos')
+    .get(verificarToken, checkPermisos('usuarios', 'ver'), getCargos);
 
 router
     .route('/ver/:id')
-    .get(verificarToken, checkPermisos('usuario', 'ver'), getUsuario);
+    .get(verificarToken, checkPermisos('usuarios', 'ver'), getUsuario);
 
 router
     .route('/actualizar/:id')
-    .put(verificarToken, checkPermisos('usuario', 'editar'), updateUsuario);
+    .put(verificarToken, checkPermisos('usuarios', 'editar'), updateUsuario);
 
 router
     .route('/eliminar/:id')
-    .delete(verificarToken, checkPermisos('usuario', 'eliminar'), deleteUsuario);
+    .delete(verificarToken, checkPermisos('usuarios', 'eliminar'), deleteUsuario);
 
 module.exports = router;

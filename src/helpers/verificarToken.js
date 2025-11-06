@@ -13,9 +13,8 @@ const verificarToken = async (req, res, next) => {
             });
         }
 
-        // CORRECCIÓN: split(' ')[1] para obtener el token después de 'Bearer'
         const token = autenticarHeader.split(' ')[1];
-        console.log('Token recibido:', token);
+        // console.log('Token recibido:', token);
 
         // VERIFICAR EL JWT
         let decoded;

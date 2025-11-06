@@ -33,7 +33,7 @@ const createCargo = async (req, res, next) => {
     try{
         const { nombre } = req.body;
 
-        const result = pool.query('INSERT INTO cargos (nombre) VALUES ($1) RETURNING *', [nombre]);
+        const result = await pool.query('INSERT INTO cargos (nombre) VALUES ($1) RETURNING *', [nombre]);
         
         await registrarBitacora ({
             accion: 'Registro',
@@ -59,7 +59,7 @@ const updateCargo = async (req, res, next) => {
 
         const oldCargo = await pool.query('SELECT * FROM cargos WHERE id = $1', [id]);
 
-        const result = await pool.query('UPDATE cargos SET nombre = $1 WHERE id = $2' ,[nombre, id]); 
+        const result = await pool.query('UPDATE cargos SET nombre = $1 WHERE id = $2 RETURNING *' ,[nombre, id]); 
 
         if(result.rows.length === 0){
             return res.status(404).json({

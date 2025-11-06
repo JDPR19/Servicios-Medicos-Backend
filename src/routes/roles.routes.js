@@ -10,7 +10,7 @@ router
 
 router
     .route('/resgistrar')
-    .get(verificarToken, checkPermisos('roles', 'crear'), createRoles);
+    .post(verificarToken, checkPermisos('roles', 'crear'), createRoles);
 
 router
     .route('/ver/:id')

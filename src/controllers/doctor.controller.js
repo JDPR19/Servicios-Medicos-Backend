@@ -74,6 +74,13 @@ try {
     return res.status(409).json({ message: 'La cédula ya existe' });
     }
 
+    if (!cargos_id || !Number.isInteger(Number(cargos_id))) {
+    return res.status(400).json({ message: "El cargo es obligatorio " });
+    }
+    if (!profesion_id || !Number.isInteger(Number(profesion_id))) {
+    return res.status(400).json({ message: "La profesión es obligatoria " });
+    }
+
     const result = await pool.query(`
     INSERT INTO doctor (cedula, nombre, apellido, contacto, cargos_id, profesion_id, estado)
     VALUES ($1, $2, $3, $4, $5, $6, TRUE)

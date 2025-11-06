@@ -70,7 +70,7 @@ const createDepartamentos = async (req, res, next) => {
 
         if (Array.isArray(finalidades_ids)){
             for(const fin of finalidades_ids){
-                await client.query('INSERT INTO finalidad_departamentos (departamentos_id, finalidades_id, objetivo)', 
+                await client.query('INSERT INTO finalidad_departamentos (departamentos_id, finalidades_id, objetivo)  VALUES ($1, $2, $3) RETURNING *', 
                     [departamentosId, fin.finalidad_id, fin.objetivo])
             };
         }
@@ -108,7 +108,7 @@ const updateDepartamentos = async (req, res, next) => {
             await client.query('DELETE FROM finalidad_departamentos WHERE departamentos_id = $1', [id]);
             if(Array.isArray(finalidades_ids)){
                 for(const fin of finalidades_ids){
-                    await client.query('INSERT INTO finalidad_departamentos (departamentos_id, finalidades_id, objetivo)', 
+                    await client.query('INSERT INTO finalidad_departamentos (departamentos_id, finalidades_id, objetivo) VALUES ($1, $2, $3) RETURNING *', 
                         [id, fin.finalidades_id, fin.objetivo]);
                 }
             }
