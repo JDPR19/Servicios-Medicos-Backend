@@ -11,9 +11,11 @@ router
 
 router
     .route('/registrar')
-    .get(verificarToken, checkPermisos('medicamentos','ver'), getCategoriaM)
     .post(verificarToken, checkPermisos('medicamentos', 'crear'), createMedicamento);
 
+router 
+    .route('/categorias/')
+    .get(verificarToken, checkPermisos('medicamentos', 'ver'), getCategoriaM);
 router
     .route('/ver/:id')
     .get(verificarToken, checkPermisos('medicamentos', 'ver'), getMedicamento);

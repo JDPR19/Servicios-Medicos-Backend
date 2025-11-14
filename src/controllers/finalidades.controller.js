@@ -39,6 +39,12 @@ const createFinalidades = async (req, res, next) => {
     try {
         const { nombre } = req.body;  
         
+        const repet = await pool.query(`SELECT 1 FROM finalidades WHERE nombre = $1`, [nombre]);
+
+        if(repet.rowCount > 0) {
+            return res.status(400).json({message: 'Ya existe una finalidad con ese nombre'});
+        }
+
         const result = await pool.query('INSERT INTO finalidades (nombre) VALUES ($1) RETURNING *', [nombre]);
 
         await registrarBitacora({
@@ -65,7 +71,7 @@ const updateFinalidades = async (req, res, next) => {
 
         const oldFinalidades = await pool.query('SELECT * FROM finalidades WHERE id = $1', [id]);
 
-        const result = await pool.query('UPDATE finalidades SET nombre = $1 WHERE id = $2', [nombre, id]);
+        const result = await pool.query('UPDATE finalidades SET nombre = $1 WHERE id = $2 RETURNING *', [nombre, id]);
 
         await registrarBitacora({
             accion: 'Actualizo',

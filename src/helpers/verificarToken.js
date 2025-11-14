@@ -4,7 +4,7 @@ const pool = require('../config/db');
 const verificarToken = async (req, res, next) => {
     try {
         const autenticarHeader = req.headers.authorization;
-        console.log('Authorization header:', autenticarHeader);
+        // console.log('Authorization header:', autenticarHeader);
 
         if (!autenticarHeader || !autenticarHeader.startsWith('Bearer')) {
             console.log('No se proporcionó el token o formato incorrecto');

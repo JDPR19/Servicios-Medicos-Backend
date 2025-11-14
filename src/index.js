@@ -36,7 +36,7 @@ const recuperacion = require('./routes/recuperacion.routes');
 
 // --- Configuración de CORS ---
 const allowed = [
-    'http://localhost:5173','https://servicios-medicos-puce.vercel.app',
+    'http://localhost:5173', 'http://localhost:4000', 'https://servicios-medicos-puce.vercel.app',
 ];
 const corsOptions = {
     origin: allowed,
@@ -111,7 +111,7 @@ app.use('/parroquias', parroquias);
 app.use('/municipios', municipios);
 app.use('/departamentos', departamentos);
 app.use('/roles', roles);
-app.use('/finalidad', finalidades);
+app.use('/finalidades', finalidades);
 app.use('/categoria_e', categoria_e);
 app.use('/categoria_m', categoria_m);
 app.use('/estado', estado);
